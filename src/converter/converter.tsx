@@ -120,11 +120,6 @@ class Converter extends Component<any, any> {
     this.state = {
       morphineEq: medicationArray[0].dailyDose,
       methadoneEq: medicationArray[1].dailyDose,
-      butrans: medicationArray[2].dailyDose,
-      codeine: medicationArray[3].dailyDose,
-      duragesic: medicationArray[4].dailyDose,
-      hydrocodone: medicationArray[5].dailyDose,
-      hydromorphone: medicationArray[6].dailyDose,
     };
     this.handleClick = this.handleClick.bind(this);
     this.calculateResult = this.calculateResult.bind(this);
@@ -134,9 +129,11 @@ class Converter extends Component<any, any> {
     let medName = `${medicationArray[index].display}`;
     medicationArray.forEach((element) => {
       if (medName === element.display) {
+        let newValue = element.dailyDose;
         label === "minus"
-          ? (element.dailyDose -= element.increment)
-          : (element.dailyDose += element.increment);
+          ? (newValue -= element.increment)
+          : (newValue += element.increment);
+        element.dailyDose = newValue;
       }
     });
     this.forceUpdate();
@@ -144,13 +141,19 @@ class Converter extends Component<any, any> {
   }
 
   handleChange(event: any, index: number) {
-    medicationArray[index].dailyDose = event.target.value;
+    {
+      event.target.value === ""
+        ? (medicationArray[index].dailyDose = 0)
+        : (medicationArray[index].dailyDose = parseInt(event.target.value));
+    }
+
     this.forceUpdate();
     this.calculateResult();
   }
 
   calculateResult() {
     let newMorphineEq = 0;
+    let newMethadoneEq = 0;
     for (var i = 0; i < 14; i++) {
       var newEquivalence = medicationArray[i].dailyDose;
       if (medicationArray[i].display === "Methadone") {
@@ -158,26 +161,28 @@ class Converter extends Component<any, any> {
       }
       newEquivalence *= medicationArray[i].toMorphine;
       newMorphineEq += newEquivalence;
+      newMethadoneEq = (Math.sqrt(newMorphineEq * 4));
     }
     this.setState({ morphineEq: Math.round(newMorphineEq) });
+    this.setState({ methadoneEq: Math.round(newMethadoneEq) });
   }
 
   render() {
     return (
-      <div
-        className="Converter"
-        style={{
-          justifyContent: "center",
-          height: "100%",
-        }}
-      >
-        <h2>
+      <div className="Converter">
+        <h1 style={{ justifyItems: 'baseline' }}>
           <span>
-            <img src={Logo}></img>
+            <img src={Logo} style={{ scale: "inherit", width: "300px" }}></img>
           </span>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Opioid Converter
-        </h2>
-        <div className="main display" style={{ backgroundColor: "maroon" }}>
+        </h1>
+        <div className="main display" style={{
+          backgroundColor: "maroon",
+          border: "1px solid dimgray",
+          paddingLeft: "30px",
+          borderRadius: "10px",
+          justifyItems: "center",
+        }}>
           <h2 style={{ color: "white" }}>
             Morphine Equivalence: {this.state.morphineEq}
           </h2>
@@ -185,18 +190,31 @@ class Converter extends Component<any, any> {
             Methadone Equivalence: {this.state.methadoneEq}
           </h2>
         </div>
-        <div style={{ border: "1px solid maroon" }}>
-          <table>
+        <div
+          style={{
+            border: "1px solid dimgray",
+            borderRadius: "10px",
+            justifyContent: "center",
+          }}
+        >
+          <table className="Form">
             <thead>
-              <tr style={{ justifyContent: "space-between" }}>
-                <th>
-                  Medication &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dosage per
-                  Day&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unit
-                </th>
+              <tr
+                className="row"
+                style={{
+                  backgroundColor: "#4568C7",
+                  color: "white",
+                  justifyContent: "space-between",
+                  marginLeft: "30px",
+                }}
+              >
+                <th>Medication</th>
+                <th>Dosage per Day</th>
+                <th>Unit</th>
+                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
               </tr>
             </thead>
-            <tbody style={{ justifyContent: "space-between" }}>
+            <tbody style={{ justifyContent: "center" }}>
               {medicationArray.map((item, index) => (
                 <tr
                   className="row"
@@ -213,8 +231,7 @@ class Converter extends Component<any, any> {
                       value={item.dailyDose}
                       style={{
                         display: "flex",
-                        width: "100%",
-                        justifyContent: "left",
+                        height: "20px",
                       }}
                       onChange={(e) => {
                         this.handleChange(e, index);
