@@ -123,43 +123,46 @@ class Converter extends Component<any, any> {
     };
     this.handleClick = this.handleClick.bind(this);
     this.calculateResult = this.calculateResult.bind(this);
+    this.handleEntry = this.handleEntry.bind(this);
+    this.clearAll = this.clearAll.bind(this);
   }
 
   handleClick(index: number, label: any) {
-    let medName = `${medicationArray[index].display}`;
-    medicationArray.forEach((element) => {
-      if (medName === element.display) {
-        let newValue = element.dailyDose;
-        label === "minus"
-          ? (newValue -= element.increment)
-          : (newValue += element.increment);
-        element.dailyDose = newValue;
-      }
-    });
-    this.forceUpdate();
+    let selected = medicationArray[index];
+    let newValue = selected.dailyDose;
+    if (label === "minus") {
+      if (selected.dailyDose >= selected.increment) newValue -= selected.increment;
+    } else {
+      newValue += selected.increment;
+    }
+    selected.dailyDose = newValue;
     this.calculateResult();
   }
 
-  handleChange(event: any, index: number) {
+  handleEntry(event: any, index: number) {
     {
-      event.target.value === ""
+      event.target.value === "" || !Number(event.target.value)
         ? (medicationArray[index].dailyDose = 0)
         : (medicationArray[index].dailyDose = parseInt(event.target.value));
     }
+    this.calculateResult();
+  }
 
-    this.forceUpdate();
+  clearAll() {
+    for (var i = 0; i < medicationArray.length; i++) {
+      medicationArray[i].dailyDose = 0;
+    }
     this.calculateResult();
   }
 
   calculateResult() {
     let newMorphineEq = 0;
     let newMethadoneEq = 0;
-    for (var i = 0; i < 14; i++) {
+    for (var i = 0; i < medicationArray.length; i++) {
       var newEquivalence = medicationArray[i].dailyDose;
-      if (medicationArray[i].display === "Methadone") {
-        newEquivalence = Math.pow(newEquivalence, 2);
-      }
-      newEquivalence *= medicationArray[i].toMorphine;
+      medicationArray[i].display === "Methadone"
+        ? newEquivalence = Math.pow(newEquivalence, 2)
+        : newEquivalence *= medicationArray[i].toMorphine;
       newMorphineEq += newEquivalence;
       newMethadoneEq = (Math.sqrt(newMorphineEq * 4));
     }
@@ -169,35 +172,38 @@ class Converter extends Component<any, any> {
 
   render() {
     return (
-      <div className="Converter">
-        <h1 style={{ justifyItems: 'baseline' }}>
+      <div className="Converter" style={{ backgroundColor: "grey", paddingBottom: "1rem" }}>
+        <div style={{ justifyItems: 'baseline', backgroundColor: "#d3d3d3", display: "flex", borderRadius: "4px" }}>
           <span>
-            <img src={Logo} style={{ scale: "inherit", width: "300px" }}></img>
+            <img src={Logo} style={{ width: "75%" }}></img>
           </span>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Opioid Converter
-        </h1>
+          <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Opioid Converter</h1>
+        </div>
         <div className="main display" style={{
           backgroundColor: "maroon",
           border: "1px solid dimgray",
           paddingLeft: "30px",
           borderRadius: "10px",
           justifyItems: "center",
+          justifyContent: "space-between",
+          display: "flex",
         }}>
-          <h2 style={{ color: "white" }}>
-            Morphine Equivalence: {this.state.morphineEq}
-          </h2>
-          <h2 style={{ color: "white" }}>
-            Methadone Equivalence: {this.state.methadoneEq}
-          </h2>
+          <div>
+            <h2 style={{ color: "white" }}>
+              Morphine Equivalence: {this.state.morphineEq}<br></br>
+            </h2>
+            <h2 style={{ color: "white" }}>
+              Methadone Equivalence: {this.state.methadoneEq}
+            </h2>
+          </div>
+          <Button variant="dark" style={{ margin: "10px", borderRadius: "4px", border: "1px solid white", fontWeight: "bold" }}
+            onClick={this.clearAll}>Clear All</Button>
         </div>
-        <div
-          style={{
+        <div>
+          <table className="Form" style={{
             border: "1px solid dimgray",
             borderRadius: "10px",
-            justifyContent: "center",
-          }}
-        >
-          <table className="Form">
+          }}>
             <thead>
               <tr
                 className="row"
@@ -206,12 +212,12 @@ class Converter extends Component<any, any> {
                   color: "white",
                   justifyContent: "space-between",
                   marginLeft: "30px",
+                  marginBottom: "-5px",
                 }}
               >
                 <th>Medication</th>
                 <th>Dosage per Day</th>
-                <th>Unit</th>
-                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                <th>Increment Dose &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
               </tr>
             </thead>
             <tbody style={{ justifyContent: "center" }}>
@@ -224,32 +230,48 @@ class Converter extends Component<any, any> {
                     justifyContent: "space-between",
                   }}
                 >
-                  <td>{item.display}</td>
-                  <td>
+                  <td style={{ width: "20%", color: "black" }}>{item.display}</td>
+                  <td style={{ width: "20%" }}>
                     <input
                       type="text"
                       value={item.dailyDose}
                       style={{
                         display: "flex",
                         height: "20px",
+                        width: "175%",
+                        border: "2px solid maroon",
+                        marginTop: "4px",
                       }}
                       onChange={(e) => {
-                        this.handleChange(e, index);
+                        this.handleEntry(e, index);
                       }}
                     ></input>
                   </td>
-                  <td>
+                  <td style={{ width: "20%" }}>
                     <span>{item.unit}</span>
                   </td>
-                  <td>
-                    <Button
-                      variant="dark"
-                      onClick={() => {
-                        this.handleClick(index, "minus");
-                      }}
-                    >
-                      -
+                  <td style={{ width: "20%" }}>
+                    {item.dailyDose < item.increment
+                      ? <Button
+                        disabled
+                        onClick={() => {
+                          this.handleClick(index, "minus");
+                        }}
+                        style={{ border: "1px solid grey", background: "white", color: "grey" }}
+                      >
+
+                        -
                     </Button>
+                      :
+                      <Button
+                        variant="dark"
+                        onClick={() => {
+                          this.handleClick(index, "minus");
+                        }}
+                      >
+                        -
+                    </Button>
+                    }
                     <Button
                       variant="dark"
                       onClick={() => {
