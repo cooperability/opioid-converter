@@ -5,6 +5,7 @@
   padding: 0 15%;
   box-sizing: border-box;
 }
+
 .Form {
   align-items: center;
   justify-content: space-between;
@@ -12,6 +13,7 @@
   width: 100%;
   background-color: #d3d3d3;
 }
+
 .Form input,
 select {
   padding: 5px;
@@ -19,6 +21,7 @@ select {
   border-radius: 5px;
   border: 1px solid rgba(119, 119, 119, 0.5);
 }
+
 .Form button {
   padding: 5px 10px;
   border-radius: 5px;
@@ -28,15 +31,18 @@ select {
   height: 20px;
   line-height: 0.3rem;
 }
+
 .Converter h3 {
   background-color: #ccc;
   border-radius: 10px;
   padding: 15px;
   font-size: 30px;
 }
+
 .Converter h2 span {
   color: maroon;
 }
+
 .row {
   border: 1px solid #808080;
   border-radius: 4px;
