@@ -140,11 +140,9 @@ class Converter extends Component<any, any> {
   }
 
   handleEntry(event: any, index: number) {
-    {
-      event.target.value === "" || !Number(event.target.value)
-        ? (medicationArray[index].dailyDose = 0)
-        : (medicationArray[index].dailyDose = parseInt(event.target.value));
-    }
+    event.target.value === "" || !Number(event.target.value)
+      ? (medicationArray[index].dailyDose = 0)
+      : (medicationArray[index].dailyDose = parseInt(event.target.value));
     this.calculateResult();
   }
 
@@ -175,9 +173,9 @@ class Converter extends Component<any, any> {
       <div className="Converter" style={{ backgroundColor: "grey", paddingBottom: "1rem" }}>
         <div style={{ justifyItems: 'baseline', backgroundColor: "#d3d3d3", display: "flex", borderRadius: "4px" }}>
           <span>
-            <img src={Logo} style={{ width: "75%" }}></img>
+            <img src={Logo} alt="logo" style={{ width: "75%" }}></img>
           </span>
-          <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Opioid Converter</h1>
+          <h1>Opioid Converter</h1>
         </div>
         <div className="main display" style={{
           backgroundColor: "maroon",
@@ -213,11 +211,12 @@ class Converter extends Component<any, any> {
                   justifyContent: "space-between",
                   marginLeft: "30px",
                   marginBottom: "-5px",
+
                 }}
               >
                 <th>Medication</th>
                 <th>Dosage per Day</th>
-                <th>Increment Dose &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                <th>Increment Dose</th>
               </tr>
             </thead>
             <tbody style={{ justifyContent: "center" }}>
@@ -261,7 +260,7 @@ class Converter extends Component<any, any> {
                       >
 
                         -
-                    </Button>
+                      </Button>
                       :
                       <Button
                         variant="dark"
@@ -270,7 +269,7 @@ class Converter extends Component<any, any> {
                         }}
                       >
                         -
-                    </Button>
+                      </Button>
                     }
                     <Button
                       variant="dark"
