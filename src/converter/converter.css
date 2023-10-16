@@ -1,28 +1,103 @@
 .Converter {
-  width: 100%;
-  height: 100%;
-  justify-content: center;
   padding: 0 15%;
   box-sizing: border-box;
+  background-color: grey;
+  padding-bottom: 1rem;
 }
 
-.Form {
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  width: 100%;
+.logo-container {
+  justify-items: baseline;
   background-color: #d3d3d3;
+  display: flex;
+  border-radius: 4px;
 }
 
-.Form input,
+.logo-wrapper {
+  width: 75%;
+}
+
+.oc-title {
+  font-weight: bold;
+  color: maroon;
+  width: 50%;
+}
+
+.mdisplay {
+  background-color: maroon;
+  border: 1px solid dimgray;
+  padding-inline: 20px;
+  padding-block: 10px;
+  border-radius: 10px;
+  justify-items: center;
+  justify-content: space-between;
+  display: flex;
+}
+
+.equivalence {
+  color: white;
+}
+
+.clear-all {
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.Tbl {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #d3d3d3;
+  border-radius: 10px;
+}
+
+.header-row {
+  background-color: maroon;
+  display: flex;
+  border-radius: 4px;
+  margin: 5px;
+  justify-content: space-between;
+  height: 30px;
+  width: 98%;
+  padding-inline: 3%;
+}
+
+.tableheader {
+  color: white;
+}
+
+.row {
+  border: 2px solid #808080;
+  display: flex;
+  border-radius: 4px;
+  margin: 3px;
+  width: 100%;
+  justify-content: space-between;
+  width: 98%;
+}
+
+.dose-input {
+  display: flex;
+  height: 20px;
+  width: 200%;
+  border: 2px solid maroon;
+}
+
+
+.Tbl td {
+  width: 20%;
+}
+
+.Tbl input,
 select {
   padding: 5px;
   margin: 5px 10px;
   border-radius: 5px;
-  border: 1px solid rgba(119, 119, 119, 0.5);
+  border: 1px solid maroon;
 }
 
-.Form button {
+.Tbl button {
   padding: 5px 10px;
   border-radius: 5px;
   background: maroon;
@@ -30,24 +105,4 @@ select {
   border: none;
   height: 20px;
   line-height: 0.3rem;
-}
-
-.Converter h3 {
-  background-color: #ccc;
-  border-radius: 10px;
-  padding: 15px;
-  font-size: 30px;
-}
-
-.Converter h2 span {
-  color: maroon;
-}
-
-.row {
-  border: 1px solid #808080;
-  border-radius: 4px;
-  margin: 10px;
-  width: 90%;
-  justify-content: center;
-  height: 30px;
 }
