@@ -170,119 +170,88 @@ class Converter extends Component<any, any> {
 
   render() {
     return (
-      <div className="Converter" style={{ backgroundColor: "grey", paddingBottom: "1rem" }}>
-        <div style={{ justifyItems: 'baseline', backgroundColor: "#d3d3d3", display: "flex", borderRadius: "4px" }}>
+      <div className="Converter">
+        <div className="logo-container">
           <span>
-            <img src={Logo} alt="logo" style={{ width: "75%" }}></img>
+            <img src={Logo} alt="logo" className="logo-wrapper"></img>
           </span>
-          <h1>Opioid Converter</h1>
+          <h1 className="oc-title">Opioid Converter</h1>
         </div>
-        <div className="main display" style={{
-          backgroundColor: "maroon",
-          border: "1px solid dimgray",
-          paddingLeft: "30px",
-          borderRadius: "10px",
-          justifyItems: "center",
-          justifyContent: "space-between",
-          display: "flex",
-        }}>
+        <div className="mdisplay">
           <div>
-            <h2 style={{ color: "white" }}>
-              Morphine Equivalence: {this.state.morphineEq}<br></br>
+            <h2 className="equivalence">
+              Morphine Equivalence: {this.state.morphineEq} mg
             </h2>
-            <h2 style={{ color: "white" }}>
-              Methadone Equivalence: {this.state.methadoneEq}
+            <h2 className="equivalence">
+              Methadone Equivalence: {this.state.methadoneEq} mg
             </h2>
           </div>
-          <Button variant="dark" style={{ margin: "10px", borderRadius: "4px", border: "1px solid white", fontWeight: "bold" }}
-            onClick={this.clearAll}>Clear All</Button>
+          <Button
+            variant="dark"
+            className="clear-all"
+            onClick={this.clearAll}><b><u>Clear All</u></b></Button>
         </div>
         <div>
-          <table className="Form" style={{
-            border: "1px solid dimgray",
-            borderRadius: "10px",
-          }}>
-            <thead>
+          <table className="Tbl">
+            <tr
+              className="header-row"
+            >
+              <th className="tableheader">Medication</th>
+              <th className="tableheader">Dosage per Day</th>
+              <th className="tableheader">Increment Dose</th>
+            </tr>
+            {medicationArray.map((item, index) => (
               <tr
                 className="row"
-                style={{
-                  backgroundColor: "#4568C7",
-                  color: "white",
-                  justifyContent: "space-between",
-                  marginLeft: "30px",
-                  marginBottom: "-5px",
-
-                }}
+                key={item.display}
               >
-                <th>Medication</th>
-                <th>Dosage per Day</th>
-                <th>Increment Dose</th>
-              </tr>
-            </thead>
-            <tbody style={{ justifyContent: "center" }}>
-              {medicationArray.map((item, index) => (
-                <tr
-                  className="row"
-                  key={item.display}
-                  style={{
-                    marginLeft: "30px",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <td style={{ width: "20%", color: "black" }}>{item.display}</td>
-                  <td style={{ width: "20%" }}>
-                    <input
-                      type="text"
-                      value={item.dailyDose}
-                      style={{
-                        display: "flex",
-                        height: "20px",
-                        width: "175%",
-                        border: "2px solid maroon",
-                        marginTop: "4px",
+                <td className="td">{item.display}</td>
+                <td>
+                  <input
+                    className="dose-input"
+                    type="text"
+                    value={item.dailyDose}
+                    onChange={(e) => {
+                      this.handleEntry(e, index);
+                    }}
+                  ></input>
+                </td>
+                <td className="td">
+                  <span>{item.unit}</span>
+                </td>
+                <td className="td">
+                  {item.dailyDose < item.increment
+                    ? <Button
+                      disabled
+                      variant="outline-dark"
+                      onClick={() => {
+                        this.handleClick(index, "minus");
                       }}
-                      onChange={(e) => {
-                        this.handleEntry(e, index);
-                      }}
-                    ></input>
-                  </td>
-                  <td style={{ width: "20%" }}>
-                    <span>{item.unit}</span>
-                  </td>
-                  <td style={{ width: "20%" }}>
-                    {item.dailyDose < item.increment
-                      ? <Button
-                        disabled
-                        onClick={() => {
-                          this.handleClick(index, "minus");
-                        }}
-                        style={{ border: "1px solid grey", background: "white", color: "grey" }}
-                      >
+                    >
 
-                        -
-                      </Button>
-                      :
-                      <Button
-                        variant="dark"
-                        onClick={() => {
-                          this.handleClick(index, "minus");
-                        }}
-                      >
-                        -
-                      </Button>
-                    }
+                      <b>-</b>
+                    </Button>
+                    :
                     <Button
                       variant="dark"
                       onClick={() => {
-                        this.handleClick(index, "plus");
+                        this.handleClick(index, "minus");
                       }}
                     >
-                      +
+                      <b>-</b>
                     </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+                  }
+                  <Button
+                    variant="dark"
+                    onClick={() => {
+                      this.handleClick(index, "plus");
+                    }}
+                  >
+                    <b>+</b>
+                  </Button>
+                </td>
+              </tr>
+            ))}
           </table>
         </div>
       </div>
